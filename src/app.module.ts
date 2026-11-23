@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -24,7 +26,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASS'),
         database: configService.get('DB_NAME'),
-        namingStrategy: new SnakeNamingStrategy(), 
+        namingStrategy: new SnakeNamingStrategy(),
         autoLoadEntities: true,
         synchronize: configService.get('DB_SYNCHRONIZE') === 'true',
       }),
@@ -33,6 +35,11 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    },
+  ],
 })
 export class AppModule { }

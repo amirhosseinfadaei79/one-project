@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { User } from './entities/user-entity';
 import { Repository } from 'typeorm';
@@ -53,5 +53,10 @@ export class AuthService {
     const payload = { sub: userAlready.id, mobile: userAlready.mobile, role: userAlready.role };
     const token = this.jwtService.sign(payload);
     return token
+  }
+  async findUserById(userId: number) {
+    const user = await this.userRepo.findOne({ where: { id: userId } })
+    if (!user) throw new NotFoundException('کاربری با این شناسه یافت نشد!');
+    return user;
   }
 }
