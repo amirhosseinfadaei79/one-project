@@ -9,6 +9,9 @@ export class User {
     @Column({ type: 'varchar', nullable: true, unique: true, length: 11 })
     mobile: string | null
 
+    @Column({ type: 'varchar', unique: true, nullable: true, length: 30 })
+    username: string | null
+
     @Column({ type: 'varchar', nullable: true, length: 255, select: false })
     password: string | null
 
