@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { RolesGuard } from './auth/guards/roles.guard';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -40,6 +41,11 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       provide: APP_GUARD,
       useClass: JwtAuthGuard
     },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
+    },
+
   ],
 })
 export class AppModule { }
